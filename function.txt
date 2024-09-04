@@ -1,0 +1,697 @@
+---UNIQUE ---- AND NULL ------
+
+CREATE TABLE Dept01(dept_id int unique,dept_name varchar(20))
+
+desc Dept01
+
+insert into Dept01(dept_id,dept_name)
+values(1,'HR')
+insert into Dept01(dept_id,dept_name)
+values(1,'HR')
+insert into Dept01(dept_id,dept_name)
+values(null,'HR')
+
+select * from Dept01
+
+drop table Dept01
+
+---NOT NULL
+
+CREATE TABLE Dept01(dept_id int Not Null,dept_name varchar(20))
+
+insert into Dept01(dept_id,dept_name)
+values(1,'HR')
+insert into Dept01(dept_id,dept_name)
+values(1,'HR')
+insert into Dept01(dept_id,dept_name)
+values(null,'HR')
+
+select * from Dept01
+DROP table Dept01
+
+---CHECK
+
+CREATE TABLE Dept01(dept_id int,dept_name varchar(20),
+salary number(6) CHECK(salary > 300000))
+
+insert into Dept01 values(1,'HR',100000)
+
+insert into Dept01 values(null,'HR',100000)
+
+insert into Dept01 values(1,'HR',300000)
+
+insert into Dept01 values(1,'HR',400000)   --inserted
+
+insert into Dept01 values(1,'HR',400000)   ----accepts duplicates but doesn't accept null values
+
+select * from Dept01
+
+drop table Dept01
+
+---ON DELETE CASCADE
+
+create table Departmt(d_id int primary key,d_name varchar(20))
+
+create table Emp(emp_id int primary key,emp_name varchar(20),salary number(7),dept_id int,
+CONSTRAINT fk_ppid
+FOREIGN KEY(dept_id)
+REFERENCES Departmt(d_id) ON DELETE CASCADE
+)
+
+desc Emp
+
+drop table Departmt
+
+insert into Departmt values(1,'hr')
+insert into Departmt values(2,'acc')
+select * from Departmt
+
+insert into Emp values(101,'venu',10000,1)
+insert into Emp values(102,'binu',20000,2)
+insert into Emp values(103,'nanu',30000,1)
+select * from Emp
+
+drop table Emp
+
+create table Emp(emp_id int primary key,emp_name varchar(20),dept_id int,
+CONSTRAINT fk_ppid
+FOREIGN KEY(dept_id)
+REFERENCES Departmt(d_id)
+)
+
+delete from Departmt where d_id=1
+
+select * from Departmt
+
+desc Emp
+
+
+---ON DELETE SET NULL
+
+create table Departmt(d_id int primary key,d_name varchar(20))
+
+create table Emp(emp_id int primary key,emp_name varchar(20),salary number(7),dept_id int,
+CONSTRAINT fk_ppid
+FOREIGN KEY(dept_id)
+REFERENCES Departmt(d_id) ON DELETE SET NULL )
+
+insert into Departmt values(1,'hr')
+insert into Departmt values(2,'acc')
+select * from Departmt
+
+insert into Emp values(101,'venu',10000,1)
+insert into Emp values(102,'binu',20000,2)
+insert into Emp values(103,'nanu',30000,1)
+select * from Emp
+
+delete from Departmt where d_id=1
+
+-------------------SELECT-----
+
+CREATE TABLE product( productid int primary key NOT NULL,productname varchar(50) UNIQUE,productdiscription varchar(50), price int,weight int,companycode int)
+
+INSERT ALL
+into product values(11293,'meswak','ayurvedic',30,200,112234)
+into product values(11294,'colgate','paste',40,300,112233)
+into product values(11295,'pepu','paste',50,400,112234)
+into product values(11296,'closeup','toothcare',60,500,112232)
+into product values(11297,'sensu','toothcare',70,600,112232)
+into product values(11298,'vicco','ayurvedic',70,600,112237)
+
+select * from dual
+
+select * from product
+
+------SELECT-----
+
+---DISTINCT
+
+select distinct productdiscription from product
+
+
+----copying the data from one table other table(that has a sametable structure)
+
+CREATE TABLE product11( productid int primary key NOT NULL,productname varchar(50) UNIQUE,productdiscription varchar(50), price int,weight int,companycode int)
+
+select * from product11
+
+---copying data from table 'product' to table 'product11'--
+
+insert into product11 select * from product
+
+---WHERE
+
+select productname,productdiscription from product11 WHERE productdiscription='toothcare'
+
+
+---operators-------------------
+
+CREATE TABLE product22( productid int primary key NOT NULL,productname varchar(50) UNIQUE,productdiscription varchar(50), price int,weight int,companycode int)
+
+INSERT ALL
+into product22 values(11293,'meswak','ayurvedic',30,200,112234)
+into product22 values(11294,'colgate','paste',40,300,112233)
+into product22 values(11295,'pepu','paste',50,400,112234)
+into product22 values(11296,'closeup','toothcare',60,500,112232)
+into product22 values(11297,'sensu','toothcare',70,600,112232)
+into product22 values(11298,'vicco','ayurvedic',70,600,112237)
+
+select * from dual
+
+select * from product22
+
+-------------ARITHMETIC OPERATOR--
+
+select productid,productname,productdiscription,price,price+100 from product22
+
+select productid,productname,productdiscription,price as "COST",price+100 AS "Price increased by 100" from product22
+
+-----comparison  or relational operators--
+
+--<> --- (not equal to)
+select * from product22 where price<>70
+
+--BETWEEN...AND--
+select productname,price from product22 WHERE price BETWEEN 30 AND 40
+
+--IN---
+select productname,price  from product22 WHERE price IN (30,50,70)
+
+--LIKE---
+select  from product22 WHERE
+
+--IS NULL--
+
+INSERT into product22(productid,productname,productdiscription, price,weight,companycode)
+values(11299,'test','ayurvedic',70,null,112237)
+
+select productname,weight from product22 where weight IS NULL
+
+--LIKE--
+
+select productname from product22 where productname LIKE 'c%'  ---casesensitive
+
+select productname from product22 where productname LIKE '%ate%'
+
+select productname from product22 where productname LIKE '_ate%'
+
+select productname from product22 where productname LIKE 'C_' ---match any string that starts with c and followed by any single character
+
+select productname from product22 where productname LIKE 'c_'
+
+select productname from product22 where productname NOT LIKE 'c%'
+
+------**LOGICAL OPERATORS-----
+
+--AND --OR-- NOT--
+
+--AND--
+
+select productname,price from product where price<=40 AND WEIGHT>200
+
+--OR--
+
+select productname,price from product where price<=40 OR WEIGHT>200
+
+--NOT--
+
+select productname,price from product where NOT (price>40)
+
+
+---CONCATENATION - ( || ) two strings
+
+drop table Employment
+
+create table Employment(first_name varchar(20),last_name varchar(20),salary number(8))
+
+insert  all
+into Employment values('kavya','raj',24000)
+into Employment values('arjun','roy',24000)
+select * from dual
+
+select * from Employment
+
+--concatenating firsta and last name
+
+select first_name || last_name AS "FULLNAME" from Employment
+
+select first_name ||' ' || last_name AS "FULL NAME" from Employment
+
+--ORDER BY---
+
+select productname,price from product ORDER BY productname   ---order : alphabetical order
+
+select productname,price from product ORDER BY price    ---ascending order (default)
+
+select productname,price from product ORDER BY price asc  ---ascending order
+
+select productname,price from product ORDER BY price desc   ----descending order
+
+
+-------------------************************************************************************************-----------------------------------------
+
+----JOINS------
+drop table Company
+
+create table Company(
+Companycode int primary key,
+Companyname varchar(50) unique
+);
+
+insert all
+into Company(Companycode,companyname)
+values(112232,'Proctor & Gamble')
+into Company(Companycode,companyname)
+values(112237,'Hindustan Unilever Limited')
+into Company(Companycode,companyname)
+values(112236,'Dabur')
+select * from dual
+
+select * from Company
+
+select * from product
+
+
+---EQUI JOIN / Inner Join---(=)
+
+select productname,productdiscription,companyname
+FROM product JOIN Company
+ON
+product.Companycode = Company.Companycode   ---(different column name can be used for common column)
+
+--OR (another method)
+
+select productname,productdiscription,companyname
+FROM product prod JOIN Company com
+ON prod.Companycode = com.Companycode
+
+--OR
+
+select productname,productdiscription,companyname
+FROM product prod JOIN Company com
+USING(Companycode)
+
+
+---OUTER JOIN--
+
+--LEFT OUTER JOIN(LEFT JOIN)
+
+select productname,productdiscription,companyname
+FROM product LEFT JOIN Company                          ---all values of left table will be viewed and for the right table -only the matching values will be viewed
+ON product.Companycode = Company.Companycode  
+
+select productname,productdiscription,price,companyname
+FROM Company LEFT JOIN product                      
+ON product.Companycode = Company.Companycode
+
+--RIGHT OUTER JOIN (RIGHT JOIN)
+    ---all values of right table will be viewed and for the left table -only the matching values will be viewed
+
+select productname,productdiscription,companyname
+FROM Company RIGHT JOIN product                          
+ON product.Companycode = Company.Companycode
+
+----FULL JOIN-- all values are viewed
+
+select productname,productdiscription,companyname
+FROM Company FULL JOIN product                          
+ON product.Companycode = Company.Companycode
+
+
+-------SELF JOIN---
+
+CREATE TABLE Staff(EmpId INT PRIMARY KEY, managerId int ,
+Firstname VARCHAR(50) , Lastname VARCHAR(50), deptno int);
+
+INSERT ALL
+INTO Staff (EmpId , managerId , Firstname , Lastname , deptno)
+VALUES (111, '', 'Mark', 'Antony', 11)
+INTO Staff (EmpId , managerId , Firstname , Lastname , deptno)
+VALUES (112, 111, 'Julius', 'Cesar', 11)
+INTO Staff (EmpId , managerId , Firstname , Lastname , deptno)
+VALUES (113, 111, 'Cleopatra', 'C', 11)
+INTO Staff (EmpId , managerId , Firstname , Lastname , deptno)
+VALUES (114, 112, 'Brutus', 'B', 11)
+
+select * from dual
+
+select * from Staff
+      ---employee & manager are alias names
+select employee.Firstname "Employee_name", manager.Firstname "Manager Name"  
+FROM Staff employee JOIN Staff manager
+ON  employee.managerId = manager.EmpId
+
+--Non-Equi Join (other than = )----used when we dont have any foreign key or common column or a matching thing
+
+CREATE TABLE PriceRange(RangeCode INT PRIMARY KEY,
+Rangename VARCHAR(50) ,  LowerRange int, HigherRange int);
+
+INSERT ALL
+INTO PriceRange(RangeCode , Rangename , LowerRange , HigherRange )
+VALUES (111, 'Low', 1, 1000)
+INTO PriceRange (RangeCode , Rangename , LowerRange , HigherRange)
+VALUES (112, 'Medium', 1001, 10000)
+INTO PriceRange(RangeCode , Rangename , LowerRange , HigherRange)
+VALUES (113, 'High', 10001, 50000)
+select * from dual
+
+select * from PriceRange
+drop table PriceRange
+
+select * from product
+
+
+--JOINS WITH THREE TABLES
+
+---pricerange---
+CREATE TABLE table2(RangeCode INT PRIMARY KEY, Rangename VARCHAR(50) ,  LowerRange int, HigherRange int,Companycode int,
+CONSTRAINT fk_pr
+FOREIGN KEY(companycode)
+REFERENCES table1(Companycode))
+
+INSERT ALL
+INTO table2(RangeCode , Rangename , LowerRange , HigherRange,Companycode )
+VALUES (111, 'Low', 1, 1000,04)
+INTO table2 (RangeCode , Rangename , LowerRange , HigherRange,Companycode)
+VALUES (112, 'Medium', 1001, 10000,05)
+INTO table2(RangeCode , Rangename , LowerRange , HigherRange,Companycode)
+VALUES (113, 'High', 10001, 50000,06)
+select * from dual
+
+select * from table2
+
+--company--
+
+create table table1(Companycode int primary key,Companyname varchar(50))
+
+insert into table1 (Companycode,companyname)
+values(04,'Proctor & Gamble')
+insert into table1 (Companycode,companyname)
+values(05,'Hindustan Unilever Limited')
+insert into table1(Companycode,companyname)
+values(06,'Dabur')
+select * from table1
+
+CREATE TABLE table3( productid int primary key NOT NULL,productname varchar(50),productdiscription varchar(50), price int,companycode int,
+CONSTRAINT fk_p
+FOREIGN KEY(companycode)
+REFERENCES table1(Companycode))
+
+INSERT ALL
+into table3 values(11293,'meswak','ayurvedic',30,04)
+into table3 values(11294,'colgate','paste',40,06)
+into table3 values(11295,'pepu','paste',50,05)
+select * from dual
+
+--EQUI JOIN---
+select companyname,RangeCode,productname,
+FROM table2 price JOIN table1 company JOIN table3 product
+USING(companycode)
+
+SELECT companyname,Rangename,productname,productdiscription
+FROM table1 x JOIN table2 y ON y.companycode = x.companycode
+JOIN table3 z ON z.companycode = x.companycode
+
+
+------FUNCTIONS-----
+
+select * from product
+
+-------AGGREGATE FUNCTIONS-----
+
+---COUNT()      --null values are not counted
+
+select COUNT(PRICE) from product
+
+select COUNT(PRICE) from product where price<50
+
+-----AVG()
+
+SELECT AVG(PRICE) from product
+
+select avg(weight) from product
+
+----SUM()
+
+select SUM(price) from product
+
+--MIN()
+
+select MIN(price) as "smallest price" from product
+
+--MAX()
+
+select MAX(price) as "largest price" from product
+
+
+---GROUP BY & HAVING------
+
+select PRODUCTDISCRIPTION,COUNT(productname) from product GROUP BY PRODUCTDISCRIPTION
+
+select productname,MIN(price) as "smallest price" from product GROUP BY productname having min(price)<50  ----where doesnt work for multiple ---so 'HAVING'
+
+---------------------   DATE FUNCTIONS   ----------------------
+
+--to get current table
+select sysdate from dual
+select current_date from dual
+
+--to get last day of current month
+select LAST_DAY(sysdate) from dual
+
+----MONTHS BETWEEN
+select MONTHS_BETWEEN(sysdate,DATE '2020 -08-27') from dual
+
+--past month  -positive ---& future moth -negative
+select MONTHS_BETWEEN(sysdate,Date'2020-08-27') from dual
+select MONTHS_BETWEEN(sysdate,Date'2030-08-27') from dual
+
+-------TRUNC ------
+      --to remove the time portion from a datetime value (or) to truncate dateteime to  specific unit(such as day,month,year) based onuy requirement
+
+select TRUNC(sysdate,'MONTH') MONTH from dual
+
+select TRUNC(sysdate,'Year') YEAR from dual
+
+select TRUNC(sysdate,'DAY') DAY from dual   --first day of week
+
+select TRUNC(DATE'2030-08-21','DAY') DAY from dual   --first day of week
+
+
+---EXTRACT---
+   ---extract day,month or year
+ 
+select EXTRACT(MONTH FROM sysdate) MONTH from dual
+
+select EXTRACT(YEAR FROM sysdate) YEAR from dual
+
+select EXTRACT(DAY FROM sysdate) DAY from dual
+
+select TRUNC(MONTHS_BETWEEN(DATE '2030-08-27',sysdate)/12) YEARS_DIFFERENCE from dual
+
+
+------------------------ ARITHMATIC FUNCTIONS  -----------------------------
+
+---CEIL  FN-----retuns the round of value(=the nearest largest number or the same num)
+
+select 1567.38 AS "NUMBER", CEIL(1567.38) from dual
+
+-----ROUND FN
+select 1567.38 AS "NUMBER", ROUND(1567.38) from dual
+select ROUND(1567.38,1) from dual   ---1567.4
+select ROUND(1567.38,-3) from dual    ---1600
+select ROUND(1567.3877788989898989898988989898,10) from dual  ---1567.387778899
+
+
+----POWER FN
+select power(3,2) from dual  --9
+
+---FLOOR
+
+select FLOOR(4.93) from dual  --4 ------this returns the largest integer value that is either less than x or equal to
+
+
+-----character fns
+
+select lower('COMPUTER') from dual
+
+select upper('computer') from dual
+
+select INITCAP('hai bye tata') from dual  ----Hai Bye Tata
+
+select length('computer science') from dual  ---16
+
+select SUBSTR('good morning',6) from dual   ---morning
+
+select SUBSTR('good morning',-6,4) from dual ---orni -(starting from 6 chars from the end, 4: length of substring to be viewed)
+
+select INSTR('good morning','orn') from dual   ---7
+
+select CONCAT('good morning',' have a good day') from dual  ----good morning have a good day
+
+select CONCAT(NULL,' have a good day') from dual  ---have a good day
+
+
+select * from product
+
+-------AGGREGATE FUNCTIONS-----   -we exactly get one output
+
+---COUNT()      --null values are not counted
+
+select COUNT(PRICE) from product
+
+select COUNT(PRICE) from product where price<50
+
+-----AVG()
+
+SELECT AVG(PRICE) from product
+
+select avg(weight) from product
+
+----SUM()
+
+select SUM(price) from product
+
+--MIN()
+
+select MIN(price) as "smallest price" from product
+
+--MAX()
+
+select MAX(price) as "largest price" from product
+
+
+---GROUP BY & HAVING------
+
+select PRODUCTDISCRIPTION,COUNT(productname) from product GROUP BY PRODUCTDISCRIPTION
+
+select productname,MIN(price) as "smallest price" from product GROUP BY productname having min(price)<50  ----where doesnt work for multiple ---so 'HAVING'
+
+---------------------   DATE FUNCTIONS   ----------------------
+
+--to get current table
+select sysdate from dual
+select current_date from dual
+
+--to get last day of current month
+select LAST_DAY(sysdate) from dual
+
+----MONTHS BETWEEN
+select MONTHS_BETWEEN(sysdate,DATE '2020 -08-27') from dual
+
+--past month  -positive ---& future moth -negative
+select MONTHS_BETWEEN(sysdate,Date'2020-08-27') from dual
+select MONTHS_BETWEEN(sysdate,Date'2030-08-27') from dual
+
+-------TRUNC ------
+      --to remove the time portion from a datetime value (or) to truncate dateteime to  specific unit(such as day,month,year) based onuy requirement
+
+select TRUNC(sysdate,'MONTH') MONTH from dual
+
+select TRUNC(sysdate,'Year') YEAR from dual
+
+select TRUNC(sysdate,'DAY') DAY from dual   --first day of week
+
+select TRUNC(DATE'2030-08-21','DAY') DAY from dual   --first day of week
+
+
+---EXTRACT---
+   ---extract day,month or year
+ 
+select EXTRACT(MONTH FROM sysdate) MONTH from dual
+
+select EXTRACT(YEAR FROM sysdate) YEAR from dual
+
+select EXTRACT(DAY FROM sysdate) DAY from dual
+
+select TRUNC(MONTHS_BETWEEN(DATE '2030-08-27',sysdate)/12) YEARS_DIFFERENCE from dual
+
+
+------------------------ ARITHMATIC FUNCTIONS  -----------------------------
+
+---CEIL  FN-----retuns the round of value(=the nearest largest number or the same num)
+
+select 1567.38 AS "NUMBER", CEIL(1567.38) from dual
+
+-----ROUND FN
+select 1567.38 AS "NUMBER", ROUND(1567.38) from dual
+select ROUND(1567.38,1) from dual   ---1567.4
+select ROUND(1567.38,-3) from dual    ---1600
+select ROUND(1567.3877788989898989898988989898,10) from dual  ---1567.387778899
+
+
+----POWER FN
+select power(3,2) from dual  --9
+
+---FLOOR
+
+select FLOOR(4.93) from dual  --4 ------this returns the largest integer value that is either less than x or equal to
+
+
+-----character fns
+
+select lower('COMPUTER') from dual
+
+select upper('computer') from dual
+
+select INITCAP('hai bye tata') from dual  ----Hai Bye Tata
+
+select length('computer science') from dual  ---16
+
+select SUBSTR('good morning',6) from dual   ---morning
+
+select SUBSTR('good morning',-6,4) from dual ---orni -(starting from 6 chars from the end, 4: length of substring to be viewed)
+
+select INSTR('good morning','orn') from dual   ---7
+
+select CONCAT('good morning',' have a good day') from dual  ----good morning have a good day
+
+select CONCAT(NULL,' have a good day') from dual  ---have a good day
+
+
+
+--**********************************************************************  SUB QUERIES  ********************************************************************
+
+select * from product
+
+---SINGLE ROW SUBQUERY
+
+select PRODUCTNAME,PRICE from product where PRICE = (select price from product where PRODUCTNAME='vicco')
+
+---ASSIGN---
+
+select PRODUCTNAME,PRODUCTDISCRIPTION,PRICE from product where PRODUCTDISCRIPTION = (select PRODUCTDISCRIPTION from product where COMPANYCODE='112233')
+
+select PRODUCTNAME,PRODUCTDISCRIPTION,PRODUCTID from product where PRODUCTDISCRIPTION = (select PRODUCTDISCRIPTION from product where PRODUCTID='11297')
+
+---MULTIPLE ROW SUBQUERY
+
+select PRODUCTNAME,PRODUCTDISCRIPTION,PRICE from product where PRODUCTDISCRIPTION IN
+(select PRODUCTDISCRIPTION from product where COMPANYCODE='112232')
+
+select PRODUCTNAME,PRODUCTDISCRIPTION,PRICE from product where PRODUCTDISCRIPTION >ALL
+(select PRODUCTDISCRIPTION from product where COMPANYCODE='112232')
+ 
+select PRODUCTNAME,PRICE from product where PRICE <ALL
+(select price from product where PRODUCTDISCRIPTION ='toothcare')
+
+
+--MULTIPLE COLOUMN
+
+select PRODUCTNAME,WEIGHT,PRICE from product WHERE (PRICE,WEIGHT) IN
+(select PRICE,WEIGHT from product where PRODUCTNAME='sensu')
+
+select * from company
+
+---CORRELATED SUB QUERY
+
+select COMPANYNAME,(select SUM(price) from product WHERE product.companycode = company.companycode) AS "Sum of price" from company
+
+select COMPANYNAME,(select SUM(price) from product WHERE companycode = company.companycode) AS "Sum of price" from company
+
+
+----SCALAR SUB QUERY
+
+select * from product
+
+select * from product where price > (select AVG(price) from product )

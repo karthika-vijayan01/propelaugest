@@ -1,0 +1,110 @@
+Data Structure
+Stack
+Queue
+Linked List
+
+Sorting Algorithms(3)
+
+Explain DS using python 
+
+Searching Algorithms(3)
+
+Naming Convension
+Pscal case --> First letter of Each Word is pascal and no space b/w word(PascalCase)
+eg:MyVariableIsString
+Camel case --> First letter of word is lowercase and subsequen wordsfirst letter are capitalized(camalCase)
+eg:myVariableIsString
+
+Variable in Python
+Lowercase seperated by underscore(snake_case)
+eg: mvar=42
+
+functions and methods: snake_case, but use verbs
+
+Constants : uppercase with underscore
+eg :--> MAX_VAL=5
+
+class : pascalcase or CapWord based on PEP 8 recommented(PEP: python Enhancement proposal)(both formats are same)
+eg :--> MyClass
+
+Modules : Lowecase with undercase
+eg :--> my_module
+private variables and methods --prifix variable and method with single underscore
+eg :--> _my_private
+protected variables and method -- prifix var and method with double underscore
+eg :--> __my_var
+global variable --> use descriptive names with uppercase and underscore
+eg :--> GLOBAL_CONSTANT=3.14
+
+camelCase  --> No Space,No Underscore
+snake_case --> No Space,can Underscore
+PascalCase --> No Space,No Underscore
+CapWord    --> No Space,No Underscore
+
+Why need:help to stay organized and quickly identify your files
+no space for every Case
+
+Modules(day5)
+python has so many built in funs all this fns are saved in files that are called modules 
+using : import fnname
+Modules:->
+random it has so many built in fns
+import random
+random.randrange #randrange()fn is part of random module use for generating random nos
+
+COMPILER AND INTERPRETER
+BOTH ARE converting high level lang(source code in python /java/c++,c#)
+Compiler Whole Execution --> before running
+Interpreter Line by line execution -->after running
+
+ERRORS
+Syntax Error :--> When the time of syntax is wrong,it occure pgm execute,Compile time error
+eg: print("Syntax"  #  Syntax Error
+Logical Error:--> Syntax is correct but code is not correct,Encounter the time of run is called Exeption,Run time error
+eg: a=5/0 # logical error 
+
+EXEPTION HANDLING
+other programming language
+
+Try  : error excepting code
+try
+{
+a=10/0
+print(a)
+}
+
+catch:error handling code 
+catch
+{
+print(" cannot divide by 0")
+}
+
+# in python try and  except
+try:
+  error excepting code
+except:
+  code to handle errors
+Finally() 
+error present or not it execute
+else()
+it execute no error were raised
+ 
+          exept   finally    else
+
+error      yes      yes       no
+no error    no      yes      yes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

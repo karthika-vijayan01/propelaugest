@@ -1,0 +1,111 @@
+-------JOINS ASSIGNMENT---
+
+drop table employees
+
+create table employees (empid INT,empname VARCHAR(30),designation VARCHAR(20),department_name varchar(20),department_id INT,
+manager_id INT,annual_income INT)
+
+insert all 
+into employees values (1, 'Mark', 'Manager','cs', 10, 1, 450000)
+into employees values (2, 'Scott', 'Developer','ec', 10, 1, 50000)
+into employees values (3, 'Tan', 'Manager','it', 20, 3, 60000)
+into employees values (4, 'Kim', 'Accounts','hr', 10, 1, 50000)
+into employees values (5, 'Josh', 'Sales','it', 30, 3, 10000)
+into employees values (6, 'Dino', 'PA','cs', 30, 3, 20000)
+select * from dual
+
+select * from employees
+
+--a--
+SELECT empname
+FROM employees
+WHERE empid = manager_id
+
+--b--
+select 'Every Year ' || empname || ' of ' || department_name || ' department earns amount ' || annual_income AS "Annual income Report"
+from employees
+
+--c--
+drop table departments
+
+create table departments (department_id INT,department_name VARCHAR(20),location VARCHAR(20))
+
+insert all
+into departments VALUES (10, 'Accounts', 'Dallas')
+into departments VALUES (20, 'Marketing', 'New York')
+into departments VALUES (30, 'Shoe', 'Los Angeles')
+select * from dual
+
+select * from departments
+
+select d.department_name,e.empname
+from departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+ORDER BY d.department_name ASC, e.empname DESC
+
+--d--
+select empname, d.department_name
+from employees e
+JOIN departments d ON e.department_id = d.department_id
+WHERE d.department_name IN ('Shoe')
+
+--e--
+select empname || ', ' || d.department_name AS "Employee and department" from employees e
+JOIN departments d ON e.department_id = d.department_id
+
+--f--
+select e.empname, e.designation AS job, e.department_id, d.department_name from employees e
+JOIN departments d ON e.department_id = d.department_id
+WHERE d.location = 'Dallas'
+
+--g--
+select e1.empname AS "Employee", e2.empname AS "Manager" from employees e1
+LEFT JOIN employees e2 ON e1.manager_id = e2.empid
+
+--h--
+select e1.empname AS "Employee", e1.manager_id AS "Manager Number", e2.empname AS "Manager Name" from employees e1
+LEFT JOIN employees e2 ON e1.manager_id = e2.empid
+WHERE e1.manager_id IS NOT NULL OR e1.empid = 1
+
+--i--
+select e1.empname AS "Employee", e1.department_id AS "Department Number"
+from employees e1
+JOIN employees e2 ON e1.department_id = e2.department_id
+WHERE e2.empname = 'Mark'
+
+--j--
+select DISTINCT e.designation AS "Job", d.location from employees e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.department_id = 30
+
+--k--
+create table courses (course_id INT,course_name VARCHAR(30))
+
+create table students (student_id INT,student_name VARCHAR(30),course_id INT,batch_name VARCHAR(20))
+
+insert all
+into courses VALUES (1, 'Mathematics')
+into courses VALUES (2, 'Physics')
+into courses VALUES (3, 'Chemistry')
+select * from dual
+
+select * from courses
+
+insert all
+into students VALUES (1, 'Alice', 1, 'Batch A')
+into students VALUES (2, 'Bob', 2, 'Batch B')
+into students VALUES (3, 'Charlie', 3, 'Batch C')
+select * from dual
+
+select * from students
+
+select s.student_name, c.course_name
+from students s
+JOIN courses c ON s.course_id = c.course_id
+
+--l--
+select student_name, batch_name from students
+
+--m--
+select s.student_name, c.course_name from courses c
+LEFT JOIN students s ON c.course_id = s.course_id

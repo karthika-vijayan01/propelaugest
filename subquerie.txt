@@ -1,0 +1,64 @@
+ Show the name, hiredate and job for employee with most seniority.
+You can set the status of your assignment here
+ 
+Create a query to display name, hiredate and salary for all employees who have both same salary and commission as Scott. Don’t display Scott in result set.
+You can set the status of your assignment here
+
+Display number, name and salary for all employees who earn more than average salary and who work in a department with any employee whose name contains a ‘T’.
+You can set the status of your assignment here
+
+Write a query to display name, department number and salary of any employee whose department number and 
+salary match department number and salary of any employee who earns a commission.
+You can set the status of your assignment here
+
+Create a query to display employee that earn a salary that is higher than salary of all Clerks. Sort result on salary from highest to lowest.
+You can set the status of your assignment here
+
+List each department that has an average salary less than the company average salary. Show department number and average salary.
+You can set the status of your assignment here
+
+ Find out the name and department name of manager getting the highest salary.
+You can set the status of your assignment here
+
+
+CREATE TABLE employees (emp_number INT PRIMARY KEY,name VARCHAR(50),hiredate DATE,job VARCHAR(50),salary DECIMAL(10, 2),commission DECIMAL(10, 2),department_number INT,department_name VARCHAR(50))
+
+INSERT ALL 
+    INTO employees VALUES (1, 'John Doe', TO_DATE('2000-01-01', 'YYYY-MM-DD'), 'Manager', 6000.00, NULL, 10, 'HR')
+    INTO employees VALUES (2, 'Jane Smith', TO_DATE('2005-03-15', 'YYYY-MM-DD'), 'Clerk', 2000.00, NULL, 20, 'Finance')
+    INTO employees VALUES (3, 'Scott', TO_DATE('2003-07-22', 'YYYY-MM-DD'), 'Analyst', 3000.00, 500.00, 30, 'IT')
+    INTO employees VALUES (4, 'Amanda Turner', TO_DATE('2010-06-12', 'YYYY-MM-DD'), 'Clerk', 2200.00, NULL, 40, 'Sales')
+    INTO employees VALUES (5, 'Robert Johnson', TO_DATE('1998-02-23', 'YYYY-MM-DD'), 'Manager', 8000.00, NULL, 10, 'HR')
+    INTO employees VALUES (6, 'Linda Thompson', TO_DATE('2011-11-30', 'YYYY-MM-DD'), 'Clerk', 2100.00, NULL, 20, 'Finance')
+    INTO employees VALUES (7, 'Tom Wilson', TO_DATE('2008-05-19', 'YYYY-MM-DD'), 'Analyst', 3000.00, 500.00, 30, 'IT')
+    INTO employees VALUES (8, 'Emily Davis', TO_DATE('2004-09-11', 'YYYY-MM-DD'), 'Salesperson', 2500.00, 300.00, 40, 'Sales')
+    INTO employees VALUES (9, 'Michael Brown', TO_DATE('1995-12-01', 'YYYY-MM-DD'), 'Manager', 10000.00, NULL, 50, 'Marketing')
+SELECT * FROM DUAL
+SELECT * FROM employees
+
+SELECT name, hiredate, job 
+FROM employees 
+WHERE ROWNUM = 1
+ORDER BY hiredate ASC
+SELECT name, hiredate, salary FROM employees WHERE salary = (SELECT salary FROM employees WHERE name = 'Scott') AND commission = (SELECT commission FROM employees WHERE name = 'Scott') AND name != 'Scott'
+
+SELECT emp_number, name, salary FROM employees e1 WHERE salary > (SELECT AVG(salary) FROM employees) AND department_number IN (SELECT department_number FROM employees e2 WHERE e2.name LIKE '%T%')
+SELECT name, department_number, salary 
+FROM employees e1
+WHERE EXISTS (
+    SELECT 1 
+    FROM employees e2  
+    WHERE e2.commission IS NOT NULL 
+      AND e1.department_number = e2.department_number 
+      AND e1.salary = e2.salary
+)
+SELECT name, salary FROM employees WHERE salary > ALL (SELECT salary  FROM employees   WHERE job = 'Clerk')
+ORDER BY salary DESC
+
+SELECT department_number, AVG(salary) AS avg_salary
+FROM employees
+GROUP BY department_number
+HAVING AVG(salary) < (SELECT AVG(salary) FROM employees)
+
+
+SELECT name, department_name FROM employees WHERE job = 'Manager' ORDER BY salary DESC FETCH FIRST 1 ROWS ONLY
